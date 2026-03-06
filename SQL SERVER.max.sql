@@ -28,6 +28,7 @@ Date_Embauche DATE DEFAULT GETDATE (),
 Salaire DECIMAL (6,2) CHECK(Salaire>0) NOT NULL DEFAULT 0,
 Adresse NVARCHAR(50) NOT NULL,
 ID_Specialites INT,
+Statut BIT DEFAULT 0 NOT NULL,
 CONSTRAINT FK_Medecin_Specialites
 FOREIGN KEY (ID_Specialites ) 
 REFERENCES Clinique.Specialites (ID_Specialites) 
@@ -120,15 +121,15 @@ INSERT INTO Clinique.Specialites (Nom, Tarif_Consultation) VALUES
 ('Ophtalmologie', 58.50),
 ('Médecine générale', 30.00);
 
-INSERT INTO Clinique.Medecins (Matricule, Nom, Prenom, Telephone, Email, Date_Embauche, Salaire, Adresse, ID_Specialites) VALUES
-('MED-1', 'Dupont', 'Jean', '0123456789', 'jean.dupont@clinique.fr', '2020-03-15', 4500.00, '15 Rue de la Paix, 75001 Paris', 1),
-('MED-2', 'Martin', 'Sophie', '0145678923', 'sophie.martin@clinique.fr', '2019-06-10', 5200.00, '8 Avenue Victor Hugo, 69002 Lyon', 2),
-('MED-3', 'Bernard', 'Pierre', '0321456987', 'pierre.bernard@clinique.fr', '2021-01-20', 3800.00, '25 Boulevard Gambetta, 59000 Lille', 3),
-('MED-4', 'Petit', 'Claire', '0456789123', 'claire.petit@clinique.fr', '2018-11-05', 6000.00, '42 Rue Paradis, 13001 Marseille', 4),
-('MED-5', 'Moreau', 'Thomas', '0567891234', 'thomas.moreau@clinique.fr', '2022-02-28', 4100.00, '7 Place du Capitole, 31000 Toulouse', 5),
-('MED-6', 'Dubois', 'Isabelle', '0678912345', 'isabelle.dubois@clinique.fr', '2020-09-12', 4800.00, '18 Quai des Belges, 34000 Montpellier', 1),
-('MED-7', 'Laurent', 'Nicolas', '0789123456', 'nicolas.laurent@clinique.fr', '2021-07-19', 3500.00, '33 Rue Sainte-Catherine, 33000 Bordeaux', 2),
-('MED-8', 'Leroy', 'Emilie', '0891234567', 'emilie.leroy@clinique.fr', '2023-04-03', 3200.00, '12 Grand Rue, 67000 Strasbourg', 3);
+INSERT INTO Clinique.Medecins (Matricule, Nom, Prenom, Telephone, Email, Date_Embauche, Salaire, Adresse, ID_Specialites,Statut) VALUES
+('MED-1', 'Dupont', 'Jean', '0123456789', 'jean.dupont@clinique.fr', '2020-03-15', 4500.00, '15 Rue de la Paix, 75001 Paris', 1, 1),
+('MED-2', 'Martin', 'Sophie', '0145678923', 'sophie.martin@clinique.fr', '2019-06-10', 5200.00, '8 Avenue Victor Hugo, 69002 Lyon', 2, 1),
+('MED-3', 'Bernard', 'Pierre', '0321456987', 'pierre.bernard@clinique.fr', '2021-01-20', 3800.00, '25 Boulevard Gambetta, 59000 Lille', 3, 0),
+('MED-4', 'Petit', 'Claire', '0456789123', 'claire.petit@clinique.fr', '2018-11-05', 6000.00, '42 Rue Paradis, 13001 Marseille', 4, 1),
+('MED-5', 'Moreau', 'Thomas', '0567891234', 'thomas.moreau@clinique.fr', '2022-02-28', 4100.00, '7 Place du Capitole, 31000 Toulouse', 5, 1),
+('MED-6', 'Dubois', 'Isabelle', '0678912345', 'isabelle.dubois@clinique.fr', '2020-09-12', 4800.00, '18 Quai des Belges, 34000 Montpellier', 1, 0),
+('MED-7', 'Laurent', 'Nicolas', '0789123456', 'nicolas.laurent@clinique.fr', '2021-07-19', 3500.00, '33 Rue Sainte-Catherine, 33000 Bordeaux', 2, 1),
+('MED-8', 'Leroy', 'Emilie', '0891234567', 'emilie.leroy@clinique.fr', '2023-04-03', 3200.00, '12 Grand Rue, 67000 Strasbourg', 3, 0);
 
 INSERT INTO Clinique.Patient (Numeros, Nom, Prenom, Date_Naissance, Sexe, Groupe_Sanguin, Telephone, Email, Adresse) VALUES
 ('PAT-2022-0101', 'Dupont', 'Jean', '1985-03-15', 'M', 'A+', '0612345678', 'jean.dupont@email.com', '15 rue de la Paix, 75001 Paris'),
@@ -184,21 +185,21 @@ INSERT INTO Clinique.Medicament (Nom_Commercial, DCI, Categorie, Prix_Unitaire, 
 
 INSERT INTO Clinique.Prescription (ID_Consultation, ID_Medicament, Posologie, Duree_Jour,Qte) VALUES
 (1, 5, '1 comprimé matin et soir', 7,1),
-(2, 12, '2 comprimés le matin', 10,3),
+(2, 1, '2 comprimés le matin', 10,3),
 (3, 3, '1 ampoule par jour', 5,5),
 (4, 8, '1 sachet 3 fois par jour', 5,6),
-(5, 15, '2 comprimés le soir', 30,10),
+(5, 1, '2 comprimés le soir', 30,10),
 (6, 7, '1 comprimé matin, midi et soir', 10,4),
 (7, 10, '1 cuillère à soupe après chaque repas', 15,4),
 (8, 2, '1 comprimé par jour', 90,5),
-(9, 14, '2 pulvérisations dans chaque narine', 20,6),
+(9, 4, '2 pulvérisations dans chaque narine', 20,6),
 (10, 6, '1 comprimé matin et soir', 14,5),
 (11, 9, '1 sachet le matin à jeun', 30,5),
 (12, 4, '1 comprimé 2 fois par jour', 8,9),
-(13, 11, '1 injection sous-cutanée par semaine', 28,2),
-(14, 13, '1 comprimé au coucher', 15,5),
+(13, 1, '1 injection sous-cutanée par semaine', 28,2),
+(14, 10, '1 comprimé au coucher', 15,5),
 (15, 1, '2 comprimés 3 fois par jour', 7,3);
-
+select*from Clinique.Medicament;
 INSERT INTO Clinique.Facture (ID_Consultation, Montant_Brut, Remis, Statut) VALUES
 (1, 120.00, 0, 'paye'),
 (2, 250.50, 10, 'impaye'),
@@ -394,6 +395,60 @@ p.Date_Inscription
 FROM Clinique.Consultation AS c 
 LEFT JOIN Clinique.patient AS p ON p.ID_Patient=c.ID_Patient
 WHERE c.ID_Patient IS NULL;
+
+--5.4
+SELECT
+m.Nom,
+s.Nom AS Specialite,
+ISNULL(SUM(f.Montant_Net),0)AS FacturePayee
+FROM Clinique.Medecins AS m
+LEFT JOIN Clinique.Consultation AS c ON m.ID_Medecins=c.ID_Medecins 
+LEFT JOIN Clinique.Facture AS f ON c.ID_Consultation=f.ID_Consultation
+LEFT JOIN Clinique.Specialites AS s ON m.ID_Specialites=s.ID_Specialites
+AND f.Statut='paye'
+WHERE m.Statut=1
+GROUP BY m.Nom, s.Nom;
+
+--5.5
+SELECT
+ISNULL(s.Nom,' pas de reseigemeny' ) AS Specialite,
+ISNULL(m.Nom,'aucun medecin') AS Medecin
+FROM Clinique.Specialites AS s
+FULL OUTER JOIN Clinique.Medecins AS  m ON s.ID_Specialites=m.ID_Specialites
+
+--5.6
+SELECT
+p.Nom,
+COUNT(DISTINCT c.ID_Medecins) AS NombreMedecin
+FROM Clinique.patient AS p
+JOIN Clinique.Consultation AS c ON p.ID_Patient=c.ID_Patient
+GROUP BY p.Nom
+HAVING COUNT(DISTINCT c.ID_Medecins)>=2;
+
+--5.7
+SELECT
+p.Nom,
+p.Prenom,
+c.Date_Consultation,
+c.Motif,
+m.Nom AS Medecin
+FROM Clinique.patient AS p
+OUTER APPLY(SELECT TOP 1 *
+FROM Clinique.Consultation AS c WHERE c.ID_Patient=p.ID_Patient
+ORDER BY c.Date_Consultation DESC) AS c
+LEFT JOIN Clinique.Medecins AS m ON c.ID_Medecins=m.ID_Medecins;
+
+--5.8
+SELECT
+c.Date_Consultation,
+p.Nom,
+m.Nom_Commercial  AS Medicament
+FROM Clinique.Consultation AS c
+JOIN Clinique.patient AS p ON c.ID_Patient=p.ID_Patient
+CROSS APPLY ( SELECT m.Nom_Commercial
+FROM Clinique.Prescription AS pr
+JOIN Clinique.Medicament AS m ON pr.ID_Medicament=m.ID_Medicament
+WHERE pr.ID_Consultation=c.ID_Consultation) AS m;
 
 
 select*from Clinique.Consultation;
