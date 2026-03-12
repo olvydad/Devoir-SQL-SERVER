@@ -6,13 +6,12 @@ END
 
 USE Clinique_Plus_BD;
 
-
 CREATE SCHEMA Clinique;
 
 --Creation de la table Specialite
 CREATE TABLE Clinique.Specialites(
 ID_Specialites INT PRIMARY KEY IDENTITY(1,1),
-Nom VARCHAR(50) NOT NULL,
+Nom NVARCHAR(50) NOT NULL,
 Tarif_Consultation DECIMAL(6,2) CHECK(Tarif_Consultation>0) DEFAULT 0,
 );
 
@@ -20,7 +19,7 @@ Tarif_Consultation DECIMAL(6,2) CHECK(Tarif_Consultation>0) DEFAULT 0,
 CREATE TABLE Clinique.Medecins(
 ID_Medecins INT PRIMARY KEY IDENTITY(1,1),
 Matricule VARCHAR(10) NOT NULL,
-Nom VARCHAR(8) NOT NULL,
+Nom NVARCHAR(8) NOT NULL,
 Prenom NVARCHAR(50) NOT NULL,
 Telephone VARCHAR(50) NOT NULL,
 Email VARCHAR(50) CHECK(Email like '%@%.%') NOT NULL UNIQUE,
@@ -42,22 +41,22 @@ CHECK (Matricule LIKE 'MED-[0-9]')
 CREATE TABLE Clinique.patient(
 ID_Patient INT PRIMARY KEY IDENTITY(1,1),
 Numeros VARCHAR(20) CHECK(Numeros LIKE'PAT-[1-2][0-9][1-2][1-7]-[0-9][0-9][0-9][0-9]'),
-Nom  VARCHAR(50) NOT NULL,
+Nom  NVARCHAR(50) NOT NULL,
 Prenom  NVARCHAR(50) NOT NULL,
 Date_Naissance  DATE NOT NULL,
 Age  AS DATEDIFF(YEAR,Date_Naissance,GETDATE()),
 Sexe  VARCHAR(50) CHECK(Sexe in('M','F')) NOT NULL,
 Groupe_Sanguin VARCHAR(3) NULL,
 Telephone  VARCHAR(50) NOT NULL,
-Email  VARCHAR(50) CHECK(Email like '%@%.%') NOT NULL UNIQUE,
+Email  NVARCHAR(50) CHECK(Email like '%@%.%') NOT NULL UNIQUE,
 Adresse NVARCHAR(50) NOT NULL,
 Date_Inscription  AS  GETDATE ());
 
 --Creation de la table Medicament
 CREATE TABLE Clinique.Medicament(
 ID_Medicament INT PRIMARY KEY IDENTITY(1,1),
-Nom_Commercial VARCHAR(50) NOT NULL,
-DCI VARCHAR(50) NOT NULL,
+Nom_Commercial NVARCHAR(50) NOT NULL,
+DCI NVARCHAR(50) NOT NULL,
 Categorie VARCHAR(50) CHECK(Categorie in('Antalgique','AINS','Sedatif','Antibiotique','Antihypertenseur')),
 Prix_Unitaire DECIMAL(3,2) CHECK(Prix_Unitaire >0) NOT NULL,
 Stock INT NOT NULL DEFAULT 0
@@ -69,7 +68,7 @@ ID_Consultation  INT PRIMARY KEY IDENTITY(1,1),
 ID_Patient INT,
 ID_Medecins INT,
 Date_Consultation date DEFAULT getdate(),
-Motif VARCHAR(50) NOT NULL,
+Motif NVARCHAR(50) NOT NULL,
 Diagnostic TEXT NOT NULL,
 Statut VARCHAR(50) CHECK(Statut in('en attente','en cours','terminer')) NOT NULL,
 CONSTRAINT FK_Cosultation_Patient
@@ -83,7 +82,7 @@ CREATE TABLE Clinique.Prescription(
 ID_Prescrition INT PRIMARY KEY IDENTITY(1,1),
 ID_Consultation INT,
 ID_Medicament   INT,
-Posologie VARCHAR(50) NOT NULL,
+Posologie NVARCHAR(50) NOT NULL,
 Duree_Jour INT NOT NULL
 CONSTRAINT FK_Prescription_Consultation
 FOREIGN KEY (ID_Consultation) REFERENCES Clinique.Consultation (ID_Consultation)
@@ -106,7 +105,7 @@ CONSTRAINT FK_Facture_Consultion
 FOREIGN KEY (ID_Consultation) REFERENCES Clinique.Consultation (ID_Consultation)
 ON DELETE CASCADE ON UPDATE CASCADE
 );
-drop table Clinique.Facture;
+
 --Creation d'index
 CREATE NONCLUSTERED INDEX I_Medecin_nom ON Clinique.Medecins(Nom);
 CREATE NONCLUSTERED INDEX I_Patient_nom_Prenom ON Clinique.patient(Nom,Prenom);
@@ -116,10 +115,10 @@ CREATE NONCLUSTERED INDEX I_Facture_ID ON Clinique.Facture(ID_Facture);
 INSERT INTO Clinique.Specialites (Nom, Tarif_Consultation) VALUES
 ('Cardiologie', 65.00),
 ('Dermatologie', 55.00),
-('Pédiatrie', 50.00),
-('Gynécologie', 60.00),
+('Pï¿½diatrie', 50.00),
+('Gynï¿½cologie', 60.00),
 ('Ophtalmologie', 58.50),
-('Médecine générale', 30.00);
+('Mï¿½decine gï¿½nï¿½rale', 30.00);
 
 INSERT INTO Clinique.Medecins (Matricule, Nom, Prenom, Telephone, Email, Date_Embauche, Salaire, Adresse, ID_Specialites,Statut) VALUES
 ('MED-1', 'Dupont', 'Jean', '0123456789', 'jean.dupont@clinique.fr', '2020-03-15', 4500.00, '15 Rue de la Paix, 75001 Paris', 1, 1),
@@ -141,64 +140,64 @@ INSERT INTO Clinique.Patient (Numeros, Nom, Prenom, Date_Naissance, Sexe, Groupe
 ('PAT-2024-0002', 'Durand', 'Thomas', '1975-06-30', 'M', 'B-', '0678901234', 'thomas.durand@email.com', '12 quai des Belges, 34000 Montpellier'),
 ('PAT-2024-0003', 'Moreau', 'Julie', '1992-04-25', 'F', 'A+', '0689012345', 'julie.moreau@email.com', '5 rue Saint-Michel, 44000 Nantes'),
 ('PAT-2024-0004', 'Simon', 'Nicolas', '1980-08-14', 'M', 'AB-', '0690123456', 'nicolas.simon@email.com', '18 Grand Rue, 67000 Strasbourg'),
-('PAT-2024-0005', 'Laurent', 'Céline', '1987-01-07', 'F', 'O+', '0611223344', 'celine.laurent@email.com', '27 rue de la République, 69003 Lyon'),
-('PAT-2024-0006', 'Lefebvre', 'David', '1972-10-19', 'M', 'A+', '0622334455', 'david.lefebvre@email.com', '9 avenue Jean Médecin, 06000 Nice'),
+('PAT-2024-0005', 'Laurent', 'Cï¿½line', '1987-01-07', 'F', 'O+', '0611223344', 'celine.laurent@email.com', '27 rue de la Rï¿½publique, 69003 Lyon'),
+('PAT-2024-0006', 'Lefebvre', 'David', '1972-10-19', 'M', 'A+', '0622334455', 'david.lefebvre@email.com', '9 avenue Jean Mï¿½decin, 06000 Nice'),
 ('PAT-2024-0007', 'Michel', 'Emilie', '1998-05-03', 'F', 'B+', '0633445566', 'emilie.michel@email.com', '55 rue Gambetta, 33000 Bordeaux'),
 ('PAT-2025-0001', 'Garcia', 'Antoine', '1983-12-21', 'M', 'O-', '0644556677', 'antoine.garcia@email.com', '22 place Stanislas, 54000 Nancy'),
 ('PAT-2025-0002', 'David', 'Laura', '1991-09-09', 'F', 'A-', '0655667788', 'laura.david@email.com', '4 rue de la Barre, 76000 Rouen'),
-('PAT-2025-0003', 'Bertrand', 'François', '1977-03-27', 'M', 'AB+', '0666778899', 'francois.bertrand@email.com', '16 boulevard de Strasbourg, 31000 Toulouse');
+('PAT-2025-0003', 'Bertrand', 'Franï¿½ois', '1977-03-27', 'M', 'AB+', '0666778899', 'francois.bertrand@email.com', '16 boulevard de Strasbourg, 31000 Toulouse');
 
 
 INSERT INTO Clinique.Consultation (ID_Patient, ID_Medecins, Date_Consultation, Motif, Diagnostic, Statut) VALUES
-( NULL,3, '2026-01-05 09:30:00', 'Fièvre et maux de tête', 'Grippe saisonnière', 'terminer'),
-(2, 1, '2026-01-06 10:15:00', 'Douleurs abdominales', 'Gastro-entérite', 'en attente'),
-(NULL, 5, '2026-01-07 14:00:00', 'Toux persistante', 'Bronchite aiguë', 'en attente'),
-(4, 2, '2026-01-08 11:30:00', 'Douleur au genou', 'Entorse légère', 'terminer'),
-(5, 4, '2026-01-09 15:45:00', 'Éruption cutanée', 'Eczéma de contact', 'en cours'),
-(6, 7, '2026-01-10 09:00:00', 'Vertiges et fatigue', 'Hypotension artérielle', 'terminer'),
+( NULL,3, '2026-01-05 09:30:00', 'Fiï¿½vre et maux de tï¿½te', 'Grippe saisonniï¿½re', 'terminer'),
+(2, 1, '2026-01-06 10:15:00', 'Douleurs abdominales', 'Gastro-entï¿½rite', 'en attente'),
+(NULL, 5, '2026-01-07 14:00:00', 'Toux persistante', 'Bronchite aiguï¿½', 'en attente'),
+(4, 2, '2026-01-08 11:30:00', 'Douleur au genou', 'Entorse lï¿½gï¿½re', 'terminer'),
+(5, 4, '2026-01-09 15:45:00', 'ï¿½ruption cutanï¿½e', 'Eczï¿½ma de contact', 'en cours'),
+(6, 7, '2026-01-10 09:00:00', 'Vertiges et fatigue', 'Hypotension artï¿½rielle', 'terminer'),
 (7, 6, '2026-01-12 16:30:00', 'Douleur thoracique', 'Examen normal, stress', 'en cours'),
 (8, 8, '2026-01-13 08:45:00', 'Mal de gorge', 'Angine rouge', 'terminer'),
 (9, 3, '2026-01-14 13:15:00', 'Suivi grossesse', 'Grossesse normale, 2e trimestre', 'terminer'),
 (10, 2, '2026-01-15 10:30:00', 'Lombalgie', 'Lumbago', 'en attente'),
-(11, 1, '2026-01-16 09:45:00', 'Tension artérielle élevée', 'Hypertension légère', 'terminer'),
-(12, 4, '2026-01-17 14:30:00', 'Problème de vision', 'Presbytie', 'terminer'),
-(13, 5, '2026-01-18 11:00:00', 'Allergie saisonnière', 'Rhinite allergique', 'terminer'),
+(11, 1, '2026-01-16 09:45:00', 'Tension artï¿½rielle ï¿½levï¿½e', 'Hypertension lï¿½gï¿½re', 'terminer'),
+(12, 4, '2026-01-17 14:30:00', 'Problï¿½me de vision', 'Presbytie', 'terminer'),
+(13, 5, '2026-01-18 11:00:00', 'Allergie saisonniï¿½re', 'Rhinite allergique', 'terminer'),
 (14, 7, '2026-01-19 15:15:00', 'Insomnie', 'Trouble anxieux', 'terminer'),
-(15, 6, '2026-01-20 08:30:00', 'Douleur épaule', 'Tendinite', 'terminer'),
-(1, 8, '2026-01-22 16:00:00', 'Suivi grippe', 'Guérison complète', 'terminer'),
-(3, 2, '2026-01-23 10:45:00', 'Renouvellement ordonnance', 'Traitement à reconduire', 'terminer'),
-(5, 4, '2026-01-24 09:15:00', 'Piqûre de tique', 'Morsure sans infection', 'terminer'),
-(8, 1, '2026-01-25 14:45:00', 'Fièvre enfant', 'Otite moyenne', 'en attente'),
-(12, 3, '2026-01-26 11:30:00', 'Douleur dentaire', 'Carie à traiter', 'en cours');
+(15, 6, '2026-01-20 08:30:00', 'Douleur ï¿½paule', 'Tendinite', 'terminer'),
+(1, 8, '2026-01-22 16:00:00', 'Suivi grippe', 'Guï¿½rison complï¿½te', 'terminer'),
+(3, 2, '2026-01-23 10:45:00', 'Renouvellement ordonnance', 'Traitement ï¿½ reconduire', 'terminer'),
+(5, 4, '2026-01-24 09:15:00', 'Piqï¿½re de tique', 'Morsure sans infection', 'terminer'),
+(8, 1, '2026-01-25 14:45:00', 'Fiï¿½vre enfant', 'Otite moyenne', 'en attente'),
+(12, 3, '2026-01-26 11:30:00', 'Douleur dentaire', 'Carie ï¿½ traiter', 'en cours');
 
 INSERT INTO Clinique.Medicament (Nom_Commercial, DCI, Categorie, Prix_Unitaire, Stock) VALUES
-('Doliprane', 'Paracétamol', 'Antalgique', 2.50, 150),
-('Ibuprofène EG', 'Ibuprofène', 'Antihypertenseur', 3.20, 80),
+('Doliprane', 'Paracï¿½tamol', 'Antalgique', 2.50, 150),
+('Ibuprofï¿½ne EG', 'Ibuprofï¿½ne', 'Antihypertenseur', 3.20, 80),
 ('Amoxicilline Mylan', 'Amoxicilline', 'Antibiotique', 5.75, 45),
 ('Spasfon', 'Phloroglucinol', 'AINS', 4.30, 60),
 ('Ventoline', 'Salbutamol', 'Sedatif', 6.90, 25),
-('Levothyrox', 'Lévothyroxine', 'Antihypertenseur', 8.40, 30),
+('Levothyrox', 'Lï¿½vothyroxine', 'Antihypertenseur', 8.40, 30),
 ('Xanax', 'Alprazolam', 'Sedatif', 4.80, 40),
-('Piqûre de rappel', 'Cyanocobalamine', 'Antihypertenseur', 7.25, 15),
-('Dexeryl', 'Dexpanthénol', 'Sedatif', 5.90, 55),
-('Efferalgan', 'Paracétamol', 'Antalgique', 3.10, 120);
+('Piqï¿½re de rappel', 'Cyanocobalamine', 'Antihypertenseur', 7.25, 15),
+('Dexeryl', 'Dexpanthï¿½nol', 'Sedatif', 5.90, 55),
+('Efferalgan', 'Paracï¿½tamol', 'Antalgique', 3.10, 120);
 
 INSERT INTO Clinique.Prescription (ID_Consultation, ID_Medicament, Posologie, Duree_Jour,Qte) VALUES
-(1, 5, '1 comprimé matin et soir', 7,1),
-(2, 1, '2 comprimés le matin', 10,3),
+(1, 5, '1 comprimï¿½ matin et soir', 7,1),
+(2, 1, '2 comprimï¿½s le matin', 10,3),
 (3, 3, '1 ampoule par jour', 5,5),
 (4, 8, '1 sachet 3 fois par jour', 5,6),
-(5, 1, '2 comprimés le soir', 30,10),
-(6, 7, '1 comprimé matin, midi et soir', 10,4),
-(7, 10, '1 cuillère à soupe après chaque repas', 15,4),
-(8, 2, '1 comprimé par jour', 90,5),
-(9, 4, '2 pulvérisations dans chaque narine', 20,6),
-(10, 6, '1 comprimé matin et soir', 14,5),
-(11, 9, '1 sachet le matin à jeun', 30,5),
-(12, 4, '1 comprimé 2 fois par jour', 8,9),
-(13, 1, '1 injection sous-cutanée par semaine', 28,2),
-(14, 10, '1 comprimé au coucher', 15,5),
-(15, 1, '2 comprimés 3 fois par jour', 7,3);
+(5, 1, '2 comprimï¿½s le soir', 30,10),
+(6, 7, '1 comprimï¿½ matin, midi et soir', 10,4),
+(7, 10, '1 cuillï¿½re ï¿½ soupe aprï¿½s chaque repas', 15,4),
+(8, 2, '1 comprimï¿½ par jour', 90,5),
+(9, 4, '2 pulvï¿½risations dans chaque narine', 20,6),
+(10, 6, '1 comprimï¿½ matin et soir', 14,5),
+(11, 9, '1 sachet le matin ï¿½ jeun', 30,5),
+(12, 4, '1 comprimï¿½ 2 fois par jour', 8,9),
+(13, 1, '1 injection sous-cutanï¿½e par semaine', 28,2),
+(14, 10, '1 comprimï¿½ au coucher', 15,5),
+(15, 1, '2 comprimï¿½s 3 fois par jour', 7,3);
 select*from Clinique.Medicament;
 INSERT INTO Clinique.Facture (ID_Consultation, Montant_Brut, Remis, Statut) VALUES
 (1, 120.00, 0, 'paye'),
@@ -213,7 +212,7 @@ INSERT INTO Clinique.Facture (ID_Consultation, Montant_Brut, Remis, Statut) VALU
 (10, 380.50, 30,  'impaye'),
 (11, 145.00, 10,  'paye'),
 (12, 620.00, 15,  'impaye');
-select * from Clinique.Consultation;
+select * from Clinique.patient
 --Creation de vue
 CREATE VIEW  V_Info_Complet_patient AS (
  SELECT Cp.Nom
@@ -227,6 +226,7 @@ CREATE VIEW  V_Info_Complet_patient AS (
  INNER JOIN Clinique.Medecins AS Cm ON Cc.ID_Medecins=Cm.ID_Medecins
  INNER JOIN Clinique.Specialites AS Cs ON Cm.ID_Specialites=Cs.ID_Specialites);
  select * from V_Factures_Impayees;
+
  CREATE VIEW V_Factures_Impayees AS (
  SELECT Cp.Nom AS Nom_Patient,
  Cp.Telephone AS Telephone,
@@ -237,6 +237,7 @@ CREATE VIEW  V_Info_Complet_patient AS (
  INNER JOIN Clinique.Facture AS Cf ON Cf.ID_Consultation = Cc.ID_Consultation
   WHERE Cf.Statut='impaye'
 );
+
  select Statut from Clinique.Facture;
  drop view V_Factures_Impayees;
  --Ajout de colonnes
