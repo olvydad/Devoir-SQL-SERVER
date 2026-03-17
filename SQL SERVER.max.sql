@@ -109,7 +109,7 @@ ON DELETE CASCADE ON UPDATE CASCADE
 --Creation d'index
 CREATE NONCLUSTERED INDEX I_Medecin_nom ON Clinique.Medecins(Nom);
 CREATE NONCLUSTERED INDEX I_Patient_nom_Prenom ON Clinique.patient(Nom,Prenom);
-CREATE NONCLUSTERED INDEX I_Facture_ID ON Clinique.Facture(ID_Facture); 
+CREATE NONCLUSTERED INDEX I_Facture_Statut ON Clinique.Facture(); 
 
 --Insertion
 INSERT INTO Clinique.Specialites (Nom, Tarif_Consultation) VALUES
@@ -214,7 +214,7 @@ INSERT INTO Clinique.Facture (ID_Consultation, Montant_Brut, Remis, Statut) VALU
 (12, 620.00, 15,  'impaye');
 select * from Clinique.patient
 --Creation de vue
-CREATE VIEW  V_Info_Complet_patient AS (
+CREATE VIEW  Vue_Consultations_Detail AS (
  SELECT Cp.Nom
  + ' '+ Cp.Prenom AS Nom_complet,
  Cm.Nom AS Nom_Medecin,
@@ -452,7 +452,7 @@ JOIN Clinique.Medicament AS m ON pr.ID_Medicament=m.ID_Medicament
 WHERE pr.ID_Consultation=c.ID_Consultation) AS m;
 
 
-select*from Clinique.Consultation;
+select*from Clinique.Facture;
 
 
 
